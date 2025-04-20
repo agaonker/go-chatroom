@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 )
 
 // Client represents a chat client
@@ -50,8 +51,15 @@ func (c *Client) Start() {
 
 	// Handle user input
 	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
+	for {
+		fmt.Print("> ")
+		if !scanner.Scan() {
+			break
+		}
 		message := scanner.Text()
+		if strings.TrimSpace(message) == "" {
+			continue
+		}
 		_, err := c.conn.Write([]byte(message))
 		if err != nil {
 			log.Printf("Error sending message: %v", err)
@@ -76,7 +84,9 @@ func (c *Client) handleIncomingMessages() {
 			log.Printf("Error reading message: %v", err)
 			continue
 		}
-		fmt.Print(message)
+		// Clear the current line and print the message
+		fmt.Print("\r\033[K", message)
+		fmt.Print("> ")
 	}
 }
 
