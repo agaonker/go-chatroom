@@ -66,5 +66,6 @@ The client will:
 
 The project uses only standard Go libraries:
 - `net` for TCP communication
-- `sync` for concurrency handling
 - `os` and `fmt` for terminal I/O 
+
+We use - `chan`  for message passing and concurrency.
